@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.alfresco.benchmarking</groupId>
+  <artifactId>performance-test-runner</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>performance-test-runner</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jmeter-maven-plugin.version>2.9.0</jmeter-maven-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<maven.compiler.target>1.8</maven.compiler.target>
+	<maven.compiler.source>1.8</maven.compiler.source>
+  </properties>
+
+  <dependencies>
+        <dependency>
+            <groupId>org.apache.jmeter</groupId>
+            <artifactId>ApacheJMeter_core</artifactId>
+            <version>5.1</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>io.github.delirius325</groupId>
+		    <artifactId>jmeter.backendlistener.elasticsearch</artifactId>
+    		<version>2.6.8</version>
+		</dependency>
+        
+    </dependencies>
+      <profiles>
+        <profile>
+            <id>standalone</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <artifactId>jmeter-maven-plugin</artifactId>
+                        <version>${jmeter-maven-plugin.version}</version>
+                        <configuration>
+                        	  <jmeterExtensions>
+                                <artifact>kg.apc:jmeter-plugins-casutg:2.8</artifact>
+                            </jmeterExtensions>
+                            <testPlanLibraries>
+                                <artifact>com.alfresco.benchmarking:performance-test-runner:${project.version}</artifact>
+                            </testPlanLibraries>
+
+                            <generateReports>false</generateReports>
+                            <errorRateThresholdInPercent>100</errorRateThresholdInPercent>
+                            <testResultsTimestamp>false</testResultsTimestamp>
+                            <propertiesJMeter>
+                                <BUILD_TAG>${project.version}</BUILD_TAG>
+                                <threads>7</threads>
+                                <duration>30</duration>
+                            </propertiesJMeter>
+                          
+                           
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>jmeter-tests</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jmeter</goal>
+                                    <goal>results</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+      </profiles>
+</project>
